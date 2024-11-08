@@ -37,8 +37,9 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const typingIndicator = addTypingIndicator();
             
-            const response = await fetch('https://web-production-d343d.up.railway.app/query/', { mode: 'no-cors'} {
+            const response = await fetch('https://web-production-d343d.up.railway.app/query/',  {
                 method: 'POST',
+                mode : 'no-cors;',
                 headers: {
                     'Content-Type': 'application/json',
                 },
