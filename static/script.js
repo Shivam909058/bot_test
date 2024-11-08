@@ -40,9 +40,11 @@ async function sendMessage(message) {
         
         const response = await fetch('https://web-production-d343d.up.railway.app/query/', {
             method: 'POST',
+            credentials: 'include',  // Include credentials if you're using sessions
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Origin': 'https://bot-test-weld-seven.vercel.app'
             },
             body: JSON.stringify({ query: message })
         });
@@ -50,6 +52,8 @@ async function sendMessage(message) {
         typingIndicator.remove();
 
         if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Server response:', errorText);
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
@@ -63,7 +67,8 @@ async function sendMessage(message) {
 
     } catch (error) {
         console.error('Error:', error);
-        addMessage('Sorry, I encountered an error while processing your request.');
+        typingIndicator?.remove();  // Remove typing indicator if still present
+        addMessage('Sorry, I encountered an error while processing your request. Please try again.');
     }
 }
 
