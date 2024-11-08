@@ -33,38 +33,41 @@ document.addEventListener('DOMContentLoaded', function() {
         return typingDiv;
     }
 
-    async function sendMessage(message) {
-        try {
-            const typingIndicator = addTypingIndicator();
-            
-            const response = await fetch('https://web-production-d343d.up.railway.app/query/',  {
-                method: 'POST',
-                mode : 'no-cors;',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ query: message })
-            });
 
-            typingIndicator.remove();
+async function sendMessage(message) {
+    try {
+        const typingIndicator = addTypingIndicator();
+        
+        const response = await fetch('https://web-production-d343d.up.railway.app/query/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ query: message })
+        });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+        typingIndicator.remove();
 
-            const data = await response.json();
-            
-            if (data.status === 'success') {
-                addMessage(data.response);
-            } else {
-                addMessage('Sorry, I encountered an error while processing your request.');
-            }
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-        } catch (error) {
-            console.error('Error:', error);
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            addMessage(data.response);
+        } else {
             addMessage('Sorry, I encountered an error while processing your request.');
         }
+
+    } catch (error) {
+        console.error('Error:', error);
+        addMessage('Sorry, I encountered an error while processing your request.');
     }
+}
+
+
 
     chatForm.addEventListener('submit', function(e) {
         e.preventDefault();
